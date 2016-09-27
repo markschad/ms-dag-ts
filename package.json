@@ -1,0 +1,32 @@
+{
+  "name": "ms-dag-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "postinstall": "typings install",
+    "prebuild": "rimraf dist",
+    "build": "tsc || false",
+    "build:w": "tsc -w || false",
+    "pretest": "npm run build",
+    "test": "npm run tape",
+    "tape": "tape dist/**/*.spec.js | tap-summary",
+    "tape:w": "watch -p \"dist/**/*.js\" -c \"npm run tape\"",
+    "pretdd": "npm run build",
+    "tdd": "concurrently --raw \"npm run -s build:w\" \"npm run -s tape:w\""
+  },
+  "keywords": [],
+  "author": "Mark Schad",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^3.0.0",
+    "faucet": "0.0.1",
+    "rimraf": "^2.5.4",
+    "tap-prettify": "0.0.2",
+    "tap-spec": "^4.1.1",
+    "tap-summary": "^3.0.1",
+    "tape": "^4.6.0",
+    "typings": "^1.4.0",
+    "watch-cli": "^0.2.1"
+  }
+}
