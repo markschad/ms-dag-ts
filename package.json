@@ -6,8 +6,8 @@
   "scripts": {
     "postinstall": "typings install",
     "prebuild": "rimraf dist",
-    "build": "tsc || false",
-    "build:w": "tsc -w || false",
+    "build": "tsc || exit 0",
+    "build:w": "tsc -w",
     "pretest": "npm run build",
     "test": "npm run tape",
     "tape": "tape dist/**/*.spec.js | tap-summary",
@@ -22,6 +22,7 @@
     "concurrently": "^3.0.0",
     "faucet": "0.0.1",
     "rimraf": "^2.5.4",
+    "tap-dot": "^1.0.5",
     "tap-prettify": "0.0.2",
     "tap-spec": "^4.1.1",
     "tap-summary": "^3.0.1",
