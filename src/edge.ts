@@ -13,3 +13,11 @@ export interface Edge {
 	/** Gets or sets the content of this edge.	 */
 	content: any;
 }
+
+/**
+ * Represents a possible connection between two vertices.
+ */
+export interface ProtoEdge {
+	top: Vertex,
+	bottom: Vertex
+}

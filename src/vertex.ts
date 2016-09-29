@@ -1,4 +1,4 @@
-import { Edge } from "./edge";
+import { Edge, ProtoEdge } from "./edge";
 
 /**
  * Represents a vertex within a directed-acyclic-graph.
@@ -197,8 +197,8 @@ export class Vertex {
 	}
 
 	/**
-	 * If necessary, moves this vertex immediately before its highest priority downlink.  Returns this
-	 * vertex.
+	 * If necessary, moves this vertex immediately before its highest priority downlink and returns
+	 * it.  Triggers this method for every uplink of this vertex.
 	 */
 	reflow() {
 		for (let e of this._downlinks) {
@@ -210,6 +210,14 @@ export class Vertex {
 			v.reflow();
 		}
 		return this;
+	}
+
+	/**
+	 * 
+	 */
+	availableConnections(): ProtoEdge[] {
+		// TODO: Implement this.
+		return [];
 	}
 
 	/**

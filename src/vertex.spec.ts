@@ -15,6 +15,33 @@ const setup = (): Vertex[] => {
 };
 
 /**
+ * Creates an array of vertices with the following topology:
+ * 
+ * 		0 --+-----------+
+ * 			  |           |
+ *        1           |
+ *                    |
+ *            2       |
+ *            |       |
+ *            +---3   |
+ *                    |
+ *                    4 
+ */
+const setupAndConnect = (): Vertex[] => {
+	const fixtures = setup();
+	fixtures[0]
+		.insertAfter(fixtures[1])
+		.insertAfter(fixtures[2])
+		.insertAfter(fixtures[3])
+		.insertAfter(fixtures[4]);
+	fixtures[0].connectTo(fixtures[1]);
+	fixtures[0].connectTo(fixtures[2]);
+	fixtures[0].connectTo(fixtures[4]);
+	fixtures[2].connectTo(fixtures[3]);
+	return fixtures;
+};
+
+/**
  * Prove "Vertex".
  */
 test("Vertex", t => {
@@ -357,6 +384,36 @@ test("Vertex", t => {
 		st.same(v[1].next, v[4], "v[1].next should be v[4].");
 		st.same(v[4].previous, v[1], "v[4].previous should be v[1].");
 		st.end();//
+	});
+
+	/**
+	 * Prove "Vertex.prototype.availableConnections":
+	 * 	- Returns an array prototypical edges which could be created without creating a cyclic
+	 * 			connection.
+	 * 
+	 * Assumptions:
+	 * 	- Vertex.constructor
+	 * 	- Vertex.prototype.connectTo
+	 */
+	t.test("Vertex.prototype.availableConnections", st => {
+		// TODO: implement.
+		// const v = setupAndConnect();
+		// const a = v[2].availableConnections();
+		// st.same(a, [ 
+		// 	{
+		// 		top: v[2],
+		// 		bottom: v[0],
+		// 	},
+		// 	{
+		// 		top: v[2],
+		// 		bottom: v[1],
+		// 	},
+		// 	{
+		// 		top: v[2],
+		// 		bottom: v[4],
+		// 	}
+		// ]);
+		st.end();
 	});
 
 	/**
