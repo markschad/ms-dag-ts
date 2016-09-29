@@ -6,7 +6,8 @@
 		"removeComments": true,
 		"jsx": "react",
 		"outDir": "./dist",
-		"inlineSourceMap": true,
+		"sourceMap": true,
+		"sourceRoot": "./src",
 		"emitDecoratorMetadata": true,
     "experimentalDecorators": true
 	},

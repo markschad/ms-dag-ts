@@ -1,3 +1,5 @@
+import * as _ from "lodash";
+
 import { Edge } from "./edge";
 import { Vertex } from "./vertex";
 
@@ -19,10 +21,23 @@ export class Graph {
 		this._edges = [];
 	}
 
-	/** Gets the ordered array of vertices contained in this graph. */
+	/** Gets the array of vertices contained in this graph. */
 	get vertices(): Vertex[] { return this._vertices; }
 
-	/** Gets the ordered array of edges contained in the graph. */
+	/** Gets the array of edges contained in the graph. */
 	get edges(): Edge[] { return this._edges; }
+
+	/**
+	 * Adds a new vertex to the graph.
+	 */
+	addVertex(...downlinks: Vertex[]): Vertex {
+		const v = new Vertex(this._vertices.length);
+		this._vertices.length && this._vertices[0].first.insertBefore(v);
+		this._vertices.push(v);
+		for (let c of downlinks) {
+			this._edges.push(v.connectTo(c, this._edges.length));
+		}
+		return v;
+	}
 
 }

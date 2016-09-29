@@ -32,8 +32,7 @@ test("Graph", t => {
 
 	/**
 	 * Proves "Graph.prototype.addVertex":
-	 * 	- Returns a new vertex.
-	 *  - Assigns it a unique id.
+	 *  - Assigns it the next available vertex id.
 	 * 	- Inserts it at the top of the chain.
 	 *  - Adds it to the ordered array of vertices.
 	 * 	- Optionally creates an edge between the new vertex and each given vertex.
@@ -43,13 +42,18 @@ test("Graph", t => {
 	 * 	- Graph.constructor
 	 */
 	t.test("Graph.prototype.addVertex", st => {
-		// const g = setup();
-		// const v0 = g.addVertex();
-		// st.ok(v0 instanceof Vertex, "v0 is an instance of Vertex.");
-		// const v1 = g.addVertex(v0);
-		// st.equal(v0.first, v1, "v1 is at the top of the chain.");
-		// st.looseEqual(v0)
-		// const v2 = g.addVertex(v1, v2);
+		const g = new Graph();
+		const v0 = g.addVertex();
+		st.equal(v0.id, 0, "v0 has id 0.");
+		st.same(g.vertices, [ v0 ], "v0 is the only vertex in g.vertices.");
+		const v1 = g.addVertex();
+		st.equal(v1.id, 1, "v1 has id 1");
+		st.same(v0.first, v1, "v1 is the first vertex.");
+		st.same(g.vertices, [ v0, v1 ], "v0 and v1 are in g.vertices respectively.");
+		const v2 = g.addVertex(v0, v1);
+		st.equal(v2.id, 2, "v2 has id 2.");
+		st.same(v0.first, v2, "v2 is the first vertex.");
+		st.equal(v2.downlinks.length, 2, "v2 has 2 downlinking edges.");
 		st.end();
 	});
 
