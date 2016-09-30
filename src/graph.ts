@@ -1,7 +1,9 @@
 import * as _ from "lodash";
 
-import { Edge } from "./edge";
+import { Edge, ProtoEdge } from "./edge";
 import { Vertex } from "./vertex";
+
+interface TraversalCallback { (vertex: Vertex, index: number): void; }
 
 /**
  * Represents a directed-acyclic-graph.
@@ -30,14 +32,52 @@ export class Graph {
 	/**
 	 * Adds a new vertex to the graph.
 	 */
-	addVertex(...downlinks: Vertex[]): Vertex {
+	addVertex(...uplinks: Vertex[]): Vertex {
 		const v = new Vertex(this._vertices.length);
-		this._vertices.length && this._vertices[0].first.insertBefore(v);
+		this._vertices.length && this._vertices[0].last.insertAfter(v);
 		this._vertices.push(v);
-		for (let c of downlinks) {
-			this._edges.push(v.connectTo(c, this._edges.length));
+		for (let l of uplinks) {
+			this._edges.push(l.connectTo(v, this._edges.length));
 		}
 		return v;
+	}
+
+	/**
+	 * Adds a new edge to the graph.
+	 */
+	addEdge(top: Vertex, bottom: Vertex): Edge {
+		const proto: ProtoEdge = { top: top, bottom: bottom };
+		const cb = e => e.top === proto.top && e.bottom === proto.bottom;
+		if (!top.availableConnections().some(cb)) {
+			throw new Error("Unable to create edge.  Circular connection detected!");
+		}
+		const e = top.connectTo(bottom, this._edges.length);
+		this._edges.push(e);
+		return e;
+	}
+
+	/**
+	 * Returns an array of every available edge.
+	 */
+	availableEdges(): ProtoEdge[] {
+		return this._vertices.reduce((prev: ProtoEdge[], cur: Vertex) => {			
+			return [ ...prev, ...cur.availableConnections() ];
+		}, []);
+	}
+
+	/**
+	 * Traverses forward from the given vertex, executing the callback at each vertex.
+	 */
+	private _traverse(v: Vertex, i: number, cb: TraversalCallback): void {
+		cb(v, i);
+		v.next && this._traverse(v.next, i+1, cb);
+	}
+
+	/**
+	 * Traverses the graph in order, calling callback at each vertex.
+	 */
+	traverse(cb: TraversalCallback) {
+		this._traverse(this._vertices[0].first, 0, cb);
 	}
 
 }

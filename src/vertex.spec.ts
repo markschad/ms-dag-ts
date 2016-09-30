@@ -370,7 +370,7 @@ test("Vertex", t => {
 	t.test("Vertex.prototype.isAbove", st =>{
 		const v = setupAndConnect();
 		st.ok(v[0].isAbove(v[1]), "v[0] is above v[1].");
-		st.ok(v[0].isAbove(v[4]), "v[0]. is above v[4].");
+		st.ok(v[0].isAbove(v[4]), "v[0] is above v[4].");
 		st.notOk(v[0].isAbove(v[0]), "v[0] is not above v[0].");
 		st.notOk(v[0].isAbove(v[2]), "v[0] is not above v[2].");
 		st.notOk(v[0].isAbove(v[3]), "v[0] is not above v[3].");
@@ -378,7 +378,7 @@ test("Vertex", t => {
 	});
 
 	/**
-	 * Proves: "Vertex.prototype.isAbove":
+	 * Proves: "Vertex.prototype.isBelow":
 	 * 	- Returns true if the subject is a direct or indirect downlink of the given vertex.
 	 * 	- Returns false if the given vertex is the subject.
 	 * 
@@ -389,6 +389,7 @@ test("Vertex", t => {
 	t.test("Vertex.prototype.isBelow", st => {
 		const v = setupAndConnect();
 		st.ok(v[3].isBelow(v[2]), "v[3] is below v[2].");
+		st.ok(v[4].isBelow(v[0]), "v[4] is below v[0].");
 		st.notOk(v[3].isBelow(v[0]), "v[3] is not below v[0].");
 		st.notOk(v[3].isBelow(v[1]), "v[3] is not below v[2].");
 		st.notOk(v[3].isBelow(v[3]), "v[3] is not below v[3].");
@@ -429,8 +430,8 @@ test("Vertex", t => {
 	 */
 	t.test("Vertex.prototype.availableConnections", st => {
 		const v = setupAndConnect();
-		const a = v[2].availableConnections();
-		st.same(a, [ 
+		const a2 = v[2].availableConnections();
+		st.same(a2, [ 
 			{
 				top: v[2],
 				bottom: v[0],
@@ -443,7 +444,22 @@ test("Vertex", t => {
 				top: v[2],
 				bottom: v[4],
 			}
-		]);
+		], "v[2] can connect to v[0], v[1] and v[4].");
+		const a4 = v[4].availableConnections();
+		st.same(a4, [ 
+			{
+				top: v[4],
+				bottom: v[1],
+			},
+			{
+				top: v[4],
+				bottom: v[2],
+			},
+			{
+				top: v[4],
+				bottom: v[3],
+			}
+		], "v[4] can connect to v[1], v[2] and v[3].");
 		st.end();
 	});
 

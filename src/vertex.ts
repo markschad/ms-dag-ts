@@ -244,9 +244,10 @@ export class Vertex {
 	 */
 	availableConnections(): ProtoEdge[] {
 		const protos: ProtoEdge[] = [];
+		const isConnected = (v: Vertex) => this._downlinks.some(e => e.bottom === v);
 		let pointer = this.first;
 		while (pointer) {
-			if (pointer !== this && !pointer.isBelow(this)) {
+			if (pointer !== this && !pointer.isAbove(this) && !isConnected(pointer)) {
 				protos.push({
 					top: this,
 					bottom: pointer

@@ -10,8 +10,8 @@
     "build:w": "tsc -w",
     "pretest": "npm run build",
     "test": "npm run tape",
-    "tape": "tape dist/**/*.spec.js | tap-summary",
-    "tape:w": "watch -p \"dist/**/*.js\" -c \"npm run tape\"",
+    "tape": "tape dist/**/*.spec.js",
+    "tape:w": "watch -p \"dist/**/*.js\" -c \"npm run -s tape\"",
     "pretdd": "npm run build",
     "tdd": "concurrently --raw \"npm run -s build:w\" \"npm run -s tape:w\""
   },
