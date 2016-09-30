@@ -147,7 +147,7 @@ export class Vertex {
 	 * Returns an array of vertices which connect directly to this vertex.
 	 */
 	directlyAbove(): Vertex[] {
-		return this._uplinks.map(e => { return e.top;	});
+		return this._uplinks.map(e => e.top);
 	}
 
 	/**
@@ -174,7 +174,7 @@ export class Vertex {
 	 * Returns an array of vertices to which this vertex direectly connects.
 	 */
 	directlyBelow(): Vertex[] {
-		return this._downlinks.map(e => {	return e.bottom; });
+		return this._downlinks.map(e => e.bottom);
 	}
 
 	/**
