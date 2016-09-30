@@ -35,7 +35,7 @@ const setupAndConnect = (): Vertex[] => {
 		.insertAfter(fixtures[3])
 		.insertAfter(fixtures[4]);
 	fixtures[0].connectTo(fixtures[1]);
-	fixtures[0].connectTo(fixtures[2]);
+	//fixtures[0].connectTo(fixtures[2]);
 	fixtures[0].connectTo(fixtures[4]);
 	fixtures[2].connectTo(fixtures[3]);
 	return fixtures;
@@ -223,7 +223,7 @@ test("Vertex", t => {
 	});
 
 	/**
-	 * Proves "Vertex.prototype.isAbove":
+	 * Proves "Vertex.prototype.isBefore":
 	 * 	- Returns true if the subject is above the given vertex.
 	 * 	- Returns false if the subject is below or is the given vertex.
 	 * 
@@ -231,16 +231,16 @@ test("Vertex", t => {
 	 * 	- Vertex.constructor
 	 * 	- Vertex.prototype.insertAfter
 	 */
-	t.test("Vertex.prototype.isAbove", st => {
+	t.test("Vertex.prototype.isBefore", st => {
 		const v = setup();
 		v[0].insertAfter(v[1]);
-		st.ok(v[0].isAbove(v[1]), "v[0] is above v[1].");
-		st.notOk(v[1].isAbove(v[0]), "v[0] is not above v[1]");
+		st.ok(v[0].isBefore(v[1]), "v[0] is above v[1].");
+		st.notOk(v[1].isBefore(v[0]), "v[0] is not above v[1]");
 		st.end();
 	});
 
 	/**
-	 * Proves "Vertex.prototype.isBelow":
+	 * Proves "Vertex.prototype.isAfter":
 	 * 	- Returns true if the subject is below the given vertex.
 	 * 	- Returns false if the subject is above or is the given vertex.
 	 * 
@@ -248,11 +248,11 @@ test("Vertex", t => {
 	 * 	- Vertex.constructor
 	 * 	- Vertex.prototype.insertBefore
 	 */
-	t.test("Vertex.prototype.isBelow", st => {
+	t.test("Vertex.prototype.isAfter", st => {
 		const v = setup();
 		v[0].insertBefore(v[1]);
-		st.ok(v[0].isBelow(v[1]));
-		st.notOk(v[1].isBelow(v[0]));
+		st.ok(v[0].isAfter(v[1]));
+		st.notOk(v[1].isAfter(v[0]));
 		st.end();
 	});
 
@@ -359,6 +359,44 @@ test("Vertex", t => {
 	});
 
 	/**
+	 * Proves "Vertex.prototype.isAbove":
+	 * 	- Returns true if the subject is a direct or indirect uplink of the given vertex.
+	 * 	- Returns false if the given vertex is the subject.
+	 * 
+	 * Assumumptions:
+	 * 	- Vertex.constructor
+	 * 	- Vertex.prototype.connectTo
+	 */
+	t.test("Vertex.prototype.isAbove", st =>{
+		const v = setupAndConnect();
+		st.ok(v[0].isAbove(v[1]), "v[0] is above v[1].");
+		st.ok(v[0].isAbove(v[4]), "v[0]. is above v[4].");
+		st.notOk(v[0].isAbove(v[0]), "v[0] is not above v[0].");
+		st.notOk(v[0].isAbove(v[2]), "v[0] is not above v[2].");
+		st.notOk(v[0].isAbove(v[3]), "v[0] is not above v[3].");
+		st.end();
+	});
+
+	/**
+	 * Proves: "Vertex.prototype.isAbove":
+	 * 	- Returns true if the subject is a direct or indirect downlink of the given vertex.
+	 * 	- Returns false if the given vertex is the subject.
+	 * 
+	 * Assumptions:
+	 * 	- Vertex.constructor
+	 * 	- Vertex.prototype.connectTo
+	 */
+	t.test("Vertex.prototype.isBelow", st => {
+		const v = setupAndConnect();
+		st.ok(v[3].isBelow(v[2]), "v[3] is below v[2].");
+		st.notOk(v[3].isBelow(v[0]), "v[3] is not below v[0].");
+		st.notOk(v[3].isBelow(v[1]), "v[3] is not below v[2].");
+		st.notOk(v[3].isBelow(v[3]), "v[3] is not below v[3].");
+		st.notOk(v[3].isBelow(v[4]), "v[2] is not below v[4].");
+		st.end();
+	});
+
+	/**
 	 * Proves "Vertex.prototype.reflow":
 	 * 	- Moves the subject in the chain directly above its highest downlink.
 	 * 	- Returns the subject.
@@ -368,13 +406,7 @@ test("Vertex", t => {
 	 * 	- Vertex.prototype.insertBefore
 	 */
 	t.test("Vertex.prototype.reflow", st => {
-		const v = setup();
-		v[0]
-			.insertAfter(v[1])
-			.insertAfter(v[2])
-			.insertAfter(v[3])
-			.insertAfter(v[4]);
-		v[2].connectTo(v[3]);
+		const v = setupAndConnect();
 		v[3].connectTo(v[0]);
 		v[3].reflow();
 		st.same(v[2].next, v[3], "v[2].next should be v[3].")
@@ -383,7 +415,7 @@ test("Vertex", t => {
 		st.same(v[0].previous, v[3], "v[0].previous should be v[3].");
 		st.same(v[1].next, v[4], "v[1].next should be v[4].");
 		st.same(v[4].previous, v[1], "v[4].previous should be v[1].");
-		st.end();//
+		st.end();
 	});
 
 	/**
@@ -396,23 +428,22 @@ test("Vertex", t => {
 	 * 	- Vertex.prototype.connectTo
 	 */
 	t.test("Vertex.prototype.availableConnections", st => {
-		// TODO: implement.
-		// const v = setupAndConnect();
-		// const a = v[2].availableConnections();
-		// st.same(a, [ 
-		// 	{
-		// 		top: v[2],
-		// 		bottom: v[0],
-		// 	},
-		// 	{
-		// 		top: v[2],
-		// 		bottom: v[1],
-		// 	},
-		// 	{
-		// 		top: v[2],
-		// 		bottom: v[4],
-		// 	}
-		// ]);
+		const v = setupAndConnect();
+		const a = v[2].availableConnections();
+		st.same(a, [ 
+			{
+				top: v[2],
+				bottom: v[0],
+			},
+			{
+				top: v[2],
+				bottom: v[1],
+			},
+			{
+				top: v[2],
+				bottom: v[4],
+			}
+		]);
 		st.end();
 	});
 

@@ -128,19 +128,19 @@ export class Vertex {
 	}
 
 	/**
-	 * Returns true if this vertex is above the given vertex.
+	 * Returns true if this vertex is before the given vertex.
 	 * @param {Vertex} vertex The vertex to check.
 	 */
-	isAbove(vertex: Vertex): boolean {
-		return this._next && (this._next === vertex || this._next.isAbove(vertex));
+	isBefore(vertex: Vertex): boolean {
+		return this._next && (this._next === vertex || this._next.isBefore(vertex));
 	}
 
 	/**
-	 * Returns true if this vertex is below the given vertex.
+	 * Returns true if this vertex is after the given vertex.
 	 * @param {Vertex} vertex The vertex to check.
 	 */
-	isBelow(vertex: Vertex): boolean {
-		return this._previous && (this._previous === vertex || this._previous.isAbove(vertex)); 
+	isAfter(vertex: Vertex): boolean {
+		return this._previous && (this._previous === vertex || this._previous.isAfter(vertex)); 
 	}
 
 	/**
@@ -160,6 +160,19 @@ export class Vertex {
 	}
 
 	/**
+	 * Returns true if this vertex is above the given vertex.
+	 */
+	isAbove(vertex: Vertex): boolean {
+		if (vertex === this) {
+			return false;
+		}
+		const cb = (e, i, arr) => {
+			return e === this;
+		};
+		return vertex.above().some(cb, this);
+	}
+
+	/**
 	 * Returns an array of vertices to which this vertex direectly connects.
 	 */
 	directlyBelow(): Vertex[] {
@@ -173,6 +186,19 @@ export class Vertex {
 		return this.directlyBelow().reduce((prev, cur) => {
 			return [ ...prev, cur, ...cur.directlyBelow() ];
 		}, []);
+	}
+
+	/**
+	 * Returns true if this vertex is below the given vertex.
+	 */
+	isBelow(vertex: Vertex): boolean {
+		if (vertex === this) {
+			return false;
+		}
+		const cb = (e, i, arr) => {
+			return e === this;
+		};
+		return vertex.below().some(cb, this);
 	}
 
 	/**
@@ -202,7 +228,7 @@ export class Vertex {
 	 */
 	reflow() {
 		for (let e of this._downlinks) {
-			if (e.bottom.isAbove(this)) {
+			if (e.bottom.isBefore(this)) {
 				e.bottom.insertBefore(this);
 			}
 		}
@@ -213,18 +239,28 @@ export class Vertex {
 	}
 
 	/**
-	 * 
+	 * Returns an array of possible edges that could be created without creating a cyclical
+	 * connection.
 	 */
 	availableConnections(): ProtoEdge[] {
-		// TODO: Implement this.
-		return [];
+		const protos: ProtoEdge[] = [];
+		let pointer = this.first;
+		while (pointer) {
+			if (pointer !== this && !pointer.isBelow(this)) {
+				protos.push({
+					top: this,
+					bottom: pointer
+				});
+			}
+			pointer = pointer.next;
+		}
+		return protos;
 	}
 
 	/**
 	 * Produces a string representation of this vertex.
 	 */
 	toString(): String {
-		let a=0;
 		return `Vertex [$this.id]`;
 	}
 	
