@@ -166,9 +166,7 @@ export class Vertex {
 		if (vertex === this) {
 			return false;
 		}
-		const cb = (e, i, arr) => {
-			return e === this;
-		};
+		const cb = (e, i, arr) => e === this;
 		return vertex.above().some(cb, this);
 	}
 
@@ -195,9 +193,7 @@ export class Vertex {
 		if (vertex === this) {
 			return false;
 		}
-		const cb = (e, i, arr) => {
-			return e === this;
-		};
+		const cb = (e, i, arr) => e === this;
 		return vertex.below().some(cb, this);
 	}
 
