@@ -123,9 +123,7 @@ var Vertex = (function () {
         if (vertex === this) {
             return false;
         }
-        var cb = function (e, i, arr) {
-            return e === _this;
-        };
+        var cb = function (e, i, arr) { return e === _this; };
         return vertex.above().some(cb, this);
     };
     Vertex.prototype.directlyBelow = function () {
@@ -141,9 +139,7 @@ var Vertex = (function () {
         if (vertex === this) {
             return false;
         }
-        var cb = function (e, i, arr) {
-            return e === _this;
-        };
+        var cb = function (e, i, arr) { return e === _this; };
         return vertex.below().some(cb, this);
     };
     Vertex.prototype.connectTo = function (vertex, id) {

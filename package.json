@@ -1,8 +1,9 @@
 {
   "name": "ms-dag-ts",
   "version": "1.0.0",
-  "description": "",
+  "description": "Directed Acyclic Graph",
   "main": "dist/index.js",
+  "typings": "src/index.ts",
   "scripts": {
     "postinstall": "typings install",
     "prebuild": "rimraf dist",

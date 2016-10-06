@@ -3,7 +3,10 @@ import * as _ from "lodash";
 import { Edge, ProtoEdge } from "./edge";
 import { Vertex } from "./vertex";
 
-interface TraversalCallback { (vertex: Vertex, index: number): void; }
+/**
+ * Function signature for traversing the graph.
+ */
+export interface TraversalCallback { (vertex: Vertex, index: number): void; }
 
 /**
  * Represents a directed-acyclic-graph.
@@ -24,10 +27,10 @@ export class Graph {
 	}
 
 	/** Gets the array of vertices contained in this graph. */
-	get vertices(): Vertex[] { return this._vertices; }
+	public get vertices(): Vertex[] { return this._vertices; }
 
 	/** Gets the array of edges contained in the graph. */
-	get edges(): Edge[] { return this._edges; }
+	public get edges(): Edge[] { return this._edges; }
 
 	/**
 	 * Adds a new vertex to the graph.
@@ -76,7 +79,7 @@ export class Graph {
 	/**
 	 * Traverses the graph in order, calling callback at each vertex.
 	 */
-	traverse(cb: TraversalCallback) {
+	public traverse(cb: TraversalCallback) {
 		this._traverse(this._vertices[0].first, 0, cb);
 	}
 
