@@ -7,6 +7,11 @@ ms-dag-ts
 Directed Acyclic Graph
 ======================
 
+Usage
+-----
+
+To install, run `npm install ms-dag-ts`.
+
 Graph
 -----
 

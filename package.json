@@ -16,6 +16,7 @@
     "pretdd": "npm run build",
     "tdd": "concurrently --raw \"npm run -s build:w\" \"npm run -s tape:w\""
   },
+  "repository": "https://github.com/markschad/ms-dag-ts.git",
   "keywords": [],
   "author": "Mark Schad",
   "license": "ISC",
