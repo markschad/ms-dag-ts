@@ -180,21 +180,21 @@ test("Vertex", function (t) {
     });
     t.test("Vertex.prototype.isAbove", function (st) {
         var v = setupAndConnect();
-        st.ok(v[0].isAbove(v[1]), "v[0] is above v[1].");
-        st.ok(v[0].isAbove(v[4]), "v[0] is above v[4].");
+        st.ok(v[1].isAbove(v[0]), "v[1] is above v[0].");
+        st.ok(v[4].isAbove(v[0]), "v[4] is above v[0].");
         st.notOk(v[0].isAbove(v[0]), "v[0] is not above v[0].");
-        st.notOk(v[0].isAbove(v[2]), "v[0] is not above v[2].");
-        st.notOk(v[0].isAbove(v[3]), "v[0] is not above v[3].");
+        st.notOk(v[2].isAbove(v[0]), "v[2] is not above v[0].");
+        st.notOk(v[3].isAbove(v[0]), "v[3] is not above v[0].");
         st.end();
     });
     t.test("Vertex.prototype.isBelow", function (st) {
         var v = setupAndConnect();
-        st.ok(v[3].isBelow(v[2]), "v[3] is below v[2].");
-        st.ok(v[4].isBelow(v[0]), "v[4] is below v[0].");
-        st.notOk(v[3].isBelow(v[0]), "v[3] is not below v[0].");
-        st.notOk(v[3].isBelow(v[1]), "v[3] is not below v[2].");
+        st.ok(v[2].isBelow(v[3]), "v[2] is below v[3].");
+        st.ok(v[0].isBelow(v[4]), "v[0] is below v[4].");
+        st.notOk(v[0].isBelow(v[3]), "v[0] is not below v[3].");
+        st.notOk(v[1].isBelow(v[3]), "v[2] is not below v[3].");
         st.notOk(v[3].isBelow(v[3]), "v[3] is not below v[3].");
-        st.notOk(v[3].isBelow(v[4]), "v[2] is not below v[4].");
+        st.notOk(v[4].isBelow(v[3]), "v[4] is not below v[2].");
         st.end();
     });
     t.test("Vertex.prototype.reflow", function (st) {

@@ -119,12 +119,11 @@ var Vertex = (function () {
         }, []);
     };
     Vertex.prototype.isAbove = function (vertex) {
-        var _this = this;
         if (vertex === this) {
             return false;
         }
-        var cb = function (e, i, arr) { return e === _this; };
-        return vertex.above().some(cb, this);
+        var cb = function (e, i, arr) { return e === vertex; };
+        return this.above().some(cb, this);
     };
     Vertex.prototype.directlyBelow = function () {
         return this._downlinks.map(function (e) { return e.bottom; });
@@ -135,12 +134,11 @@ var Vertex = (function () {
         }, []);
     };
     Vertex.prototype.isBelow = function (vertex) {
-        var _this = this;
         if (vertex === this) {
             return false;
         }
-        var cb = function (e, i, arr) { return e === _this; };
-        return vertex.below().some(cb, this);
+        var cb = function (e, i, arr) { return e === vertex; };
+        return this.below().some(cb, this);
     };
     Vertex.prototype.connectTo = function (vertex, id) {
         if (id === void 0) { id = 0; }
@@ -179,7 +177,7 @@ var Vertex = (function () {
         var isConnected = function (v) { return _this._downlinks.some(function (e) { return e.bottom === v; }); };
         var pointer = this.first;
         while (pointer) {
-            if (pointer !== this && !pointer.isAbove(this) && !isConnected(pointer)) {
+            if (pointer !== this && !pointer.isBelow(this) && !isConnected(pointer)) {
                 protos.push({
                     top: this,
                     bottom: pointer

@@ -21,13 +21,8 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^3.0.0",
-    "faucet": "0.0.1",
     "lodash": "^4.16.2",
     "rimraf": "^2.5.4",
-    "tap-dot": "^1.0.5",
-    "tap-prettify": "0.0.2",
-    "tap-spec": "^4.1.1",
-    "tap-summary": "^3.0.1",
     "tape": "^4.6.0",
     "typings": "^1.4.0",
     "watch-cli": "^0.2.1"

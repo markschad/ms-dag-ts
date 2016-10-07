@@ -160,14 +160,14 @@ export class Vertex {
 	}
 
 	/**
-	 * Returns true if this vertex is above the given vertex.
+	 * Returns true if the given vertex is a direct or indirect uplink of this vertex.
 	 */
 	isAbove(vertex: Vertex): boolean {
 		if (vertex === this) {
 			return false;
 		}
-		const cb = (e, i, arr) => e === this;
-		return vertex.above().some(cb, this);
+		const cb = (e, i, arr) => e === vertex;
+		return this.above().some(cb, this);
 	}
 
 	/**
@@ -187,14 +187,14 @@ export class Vertex {
 	}
 
 	/**
-	 * Returns true if this vertex is below the given vertex.
+	 * Returns true if the given vertex is a direct or indirect downlink of this vertex.
 	 */
 	isBelow(vertex: Vertex): boolean {
 		if (vertex === this) {
 			return false;
 		}
-		const cb = (e, i, arr) => e === this;
-		return vertex.below().some(cb, this);
+		const cb = (e, i, arr) => e === vertex;
+		return this.below().some(cb, this);
 	}
 
 	/**
@@ -243,7 +243,7 @@ export class Vertex {
 		const isConnected = (v: Vertex) => this._downlinks.some(e => e.bottom === v);
 		let pointer = this.first;
 		while (pointer) {
-			if (pointer !== this && !pointer.isAbove(this) && !isConnected(pointer)) {
+			if (pointer !== this && !pointer.isBelow(this) && !isConnected(pointer)) {
 				protos.push({
 					top: this,
 					bottom: pointer
