@@ -1,6 +1,6 @@
 {
   "name": "ms-dag-ts",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Directed Acyclic Graph",
   "main": "dist/index.js",
   "typings": "dist/index",
