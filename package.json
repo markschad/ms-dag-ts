@@ -1,6 +1,6 @@
 {
   "name": "ms-dag-ts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Directed Acyclic Graph",
   "main": "dist/index.js",
   "typings": "dist/index",
@@ -22,14 +22,11 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^3.0.0",
-    "lodash": "^4.16.2",
     "rimraf": "^2.5.4",
     "tape": "^4.6.0",
     "typescript": "^2.0.3",
     "typings": "^1.4.0",
     "watch-cli": "^0.2.1"
   },
-  "dependencies": {
-    "lodash": "^4.16.2"
-  }
+  "dependencies": {}
 }

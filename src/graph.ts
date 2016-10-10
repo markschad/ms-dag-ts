@@ -1,5 +1,3 @@
-import * as _ from "lodash";
-
 import { Edge, ProtoEdge } from "./edge";
 import { Vertex } from "./vertex";
 
