@@ -10,10 +10,10 @@
 		"sourceRoot": "./src",
 		"emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-		"declaration": true,
-		"declarationDir": "./dist/typings"
+		"declaration": true
 	},
 	"exclude": [
+		"dist",
 		"node_modules",
 		".vscode",
 		".git"

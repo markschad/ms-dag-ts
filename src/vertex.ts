@@ -47,7 +47,7 @@ export class Vertex {
 	}
 
 	/** Gets the collection of uplinks. */
-	public get uplinks(): Edge[] { return this._uplinks; }
+	get uplinks(): Edge[] { return this._uplinks; }
 
 	/** Gets the collection of downlinks. */
 	get downlinks(): Edge[] { return this._downlinks; }

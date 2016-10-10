@@ -1,0 +1,36 @@
+import { Edge, ProtoEdge } from "./edge";
+export declare class Vertex {
+    private _id;
+    private _next;
+    private _previous;
+    private _uplinks;
+    private _downlinks;
+    static join(v1: Vertex, v2: Vertex): void;
+    static unjoin(vertex: Vertex): void;
+    constructor(id?: number);
+    content: any;
+    readonly id: number;
+    readonly uplinks: Edge[];
+    readonly downlinks: Edge[];
+    readonly first: Vertex;
+    readonly before: Vertex[];
+    readonly previous: Vertex;
+    readonly next: Vertex;
+    readonly after: Vertex[];
+    readonly last: Vertex;
+    remove(): Vertex;
+    insertBefore(vertex: Vertex): Vertex;
+    insertAfter(vertex: Vertex): Vertex;
+    isBefore(vertex: Vertex): boolean;
+    isAfter(vertex: Vertex): boolean;
+    directlyAbove(): Vertex[];
+    above(): Vertex[];
+    isAbove(vertex: Vertex): boolean;
+    directlyBelow(): Vertex[];
+    below(): Vertex[];
+    isBelow(vertex: Vertex): boolean;
+    connectTo(vertex: Vertex, id?: number): Edge;
+    reflow(): this;
+    availableConnections(): ProtoEdge[];
+    toString(): String;
+}

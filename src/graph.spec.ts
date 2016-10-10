@@ -2,7 +2,7 @@ import * as test from "tape";
 
 import "./vertex.spec";
 
-import { Graph } from "./graph";
+import { Graph, } from "./graph";
 import { Vertex } from "./vertex";
 
 /**
@@ -15,7 +15,7 @@ const setup = (): Graph => {
 /**
  * Creates a Graph with the following topology:
  * 
- * 		0 --+-----------+
+ * 		0---+-----------+
  * 			  |           |
  *        1           |
  *                    |
