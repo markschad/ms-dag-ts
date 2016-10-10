@@ -70,8 +70,7 @@ export class Graph {
 	 * Traverses forward from the given vertex, executing the callback at each vertex.
 	 */
 	private _traverse(v: Vertex, i: number, cb: TraversalCallback): void {
-		cb(v, i);
-		v.next && this._traverse(v.next, i+1, cb);
+		!cb(v, i) && v.next && this._traverse(v.next, i+1, cb);
 	}
 
 	/**

@@ -105,6 +105,24 @@ test("Graph", t => {
 	});
 
 	/**
+	 * Proves "Graph.prototype.traverse":
+	 * 	- Visits each vertex in order.
+	 * 	- Stops if a truthy value is returned by cb.
+	 * 
+	 * Assumptions:
+	 * 	- Graph.constructor
+	 * 	- Graph.prototype.addVertex
+	 */
+	t.test("Graph.prototype.traverse", st => {
+		const g = setupAndConnect();
+		const a = [];
+		const cb = v => a.push(v.id) > 2;
+		g.traverse(cb);
+		st.same(a, [ 0, 1, 2 ]);
+		st.end();
+	});
+
+	/**
 	 * Done.
 	 */
 	t.end();

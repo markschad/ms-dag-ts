@@ -65,8 +65,7 @@ var Graph = (function () {
      * Traverses forward from the given vertex, executing the callback at each vertex.
      */
     Graph.prototype._traverse = function (v, i, cb) {
-        cb(v, i);
-        v.next && this._traverse(v.next, i + 1, cb);
+        !cb(v, i) && v.next && this._traverse(v.next, i + 1, cb);
     };
     /**
      * Traverses the graph in order, calling callback at each vertex.
