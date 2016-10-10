@@ -2,9 +2,25 @@
 var test = require("tape");
 require("./vertex.spec");
 var graph_1 = require("./graph");
+/**
+ * Creates a Graph with the following topology:
+ */
 var setup = function () {
     return new graph_1.Graph();
 };
+/**
+ * Creates a Graph with the following topology:
+ *
+ * 		0---+-----------+
+ * 			  |           |
+ *        1           |
+ *                    |
+ *            2       |
+ *            |       |
+ *            +---3   |
+ *                    |
+ *                    4
+ */
 var setupAndConnect = function () {
     var g = new graph_1.Graph();
     var v0 = g.addVertex();
@@ -14,7 +30,16 @@ var setupAndConnect = function () {
     var v4 = g.addVertex(v0);
     return g;
 };
+/**
+ * Proves that the Graph class works as intended.
+ *
+ * Assumptions:
+ * 	- Vertex
+ */
 test("Graph", function (t) {
+    /**
+     * Proves that "new Graph" creates a new instance of Graph.
+     */
     t.test("Graph.constructor", function (st) {
         var g = new graph_1.Graph();
         st.ok(g instanceof graph_1.Graph, "g is an instance of Graph");
@@ -22,6 +47,18 @@ test("Graph", function (t) {
         st.equal(g.edges.length, 0, "g is initialised with no edges.");
         st.end();
     });
+    /**
+     * Proves "Graph.prototype.addVertex":
+     * 	- Creates a new vertex.
+     *  - Assigns it the next available vertex id.
+     * 	- Inserts it at the end of the chain.
+     *  - Adds it to the ordered array of vertices.
+     * 	- Optionally creates an edge between the new vertex and each given vertex.
+     *  - Returns the new vertex.
+     *
+     * Assumptions:
+     * 	- Graph.constructor
+     */
     t.test("Graph.prototype.addVertex", function (st) {
         var g = new graph_1.Graph();
         var v0 = g.addVertex();
@@ -37,6 +74,18 @@ test("Graph", function (t) {
         st.equal(v2.uplinks.length, 2, "v2 has 2 uplinking edges.");
         st.end();
     });
+    /**
+     * Proves "Graph.prototype.addEdge":
+     * 	- Throws an error if the connection is not available.
+     * 	- Creates a new edge.
+     * 	- Assigns it the next available id.
+     * 	- Assigns it the given top and bottom vertices.
+     * 	- Returns it.
+     *
+     * Assumptions:
+     * 	- Graph.constructor
+     * 	- Graph.prototype.addVertex
+     */
     t.test("Graph.prototype.addEdge", function (st) {
         var g = setupAndConnect();
         var throwError = function () { g.addEdge(g.vertices[4], g.vertices[0]); };
@@ -47,6 +96,9 @@ test("Graph", function (t) {
         st.same(e.bottom, g.vertices[0], "sets bottom to v[0].");
         st.end();
     });
+    /**
+     * Done.
+     */
     t.end();
 });
 //# sourceMappingURL=graph.spec.js.map

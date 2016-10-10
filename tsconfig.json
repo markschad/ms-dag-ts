@@ -3,7 +3,7 @@
 		"target": "es5",
 		"module": "commonjs",
 		"moduleResolution": "node",
-		"removeComments": true,
+		"removeComments": false,
 		"jsx": "react",
 		"outDir": "./dist",
 		"sourceMap": true,

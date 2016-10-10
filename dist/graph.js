@@ -1,20 +1,31 @@
 "use strict";
 var vertex_1 = require("./vertex");
+/**
+ * Represents a directed-acyclic-graph.
+ */
 var Graph = (function () {
+    /**
+     * Instantiates a new instance of Graph.
+     */
     function Graph() {
         this._vertices = [];
         this._edges = [];
     }
     Object.defineProperty(Graph.prototype, "vertices", {
+        /** Gets the array of vertices contained in this graph. */
         get: function () { return this._vertices; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(Graph.prototype, "edges", {
+        /** Gets the array of edges contained in the graph. */
         get: function () { return this._edges; },
         enumerable: true,
         configurable: true
     });
+    /**
+     * Adds a new vertex to the graph.
+     */
     Graph.prototype.addVertex = function () {
         var uplinks = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -29,6 +40,9 @@ var Graph = (function () {
         }
         return v;
     };
+    /**
+     * Adds a new edge to the graph.
+     */
     Graph.prototype.addEdge = function (top, bottom) {
         var proto = { top: top, bottom: bottom };
         var cb = function (e) { return e.top === proto.top && e.bottom === proto.bottom; };
@@ -39,15 +53,24 @@ var Graph = (function () {
         this._edges.push(e);
         return e;
     };
+    /**
+     * Returns an array of every available edge.
+     */
     Graph.prototype.availableEdges = function () {
         return this._vertices.reduce(function (prev, cur) {
             return prev.concat(cur.availableConnections());
         }, []);
     };
+    /**
+     * Traverses forward from the given vertex, executing the callback at each vertex.
+     */
     Graph.prototype._traverse = function (v, i, cb) {
         cb(v, i);
         v.next && this._traverse(v.next, i + 1, cb);
     };
+    /**
+     * Traverses the graph in order, calling callback at each vertex.
+     */
     Graph.prototype.traverse = function (cb) {
         this._traverse(this._vertices[0].first, 0, cb);
     };

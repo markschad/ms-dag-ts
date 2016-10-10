@@ -1,6 +1,9 @@
 "use strict";
 var test = require("tape");
 var vertex_1 = require("./vertex");
+/**
+ * Creates an array of isolated vertices.
+ */
 var setup = function () {
     var fixtures = [];
     var prev = null;
@@ -9,6 +12,19 @@ var setup = function () {
     }
     return fixtures;
 };
+/**
+ * Creates an array of vertices with the following topology:
+ *
+ * 		0 --+-----------+
+ * 			  |           |
+ *        1           |
+ *                    |
+ *            2       |
+ *            |       |
+ *            +---3   |
+ *                    |
+ *                    4
+ */
 var setupAndConnect = function () {
     var fixtures = setup();
     fixtures[0]
@@ -17,11 +33,20 @@ var setupAndConnect = function () {
         .insertAfter(fixtures[3])
         .insertAfter(fixtures[4]);
     fixtures[0].connectTo(fixtures[1]);
+    //fixtures[0].connectTo(fixtures[2]);
     fixtures[0].connectTo(fixtures[4]);
     fixtures[2].connectTo(fixtures[3]);
     return fixtures;
 };
+/**
+ * Prove "Vertex".
+ */
 test("Vertex", function (t) {
+    /**
+     * Proves "Vertex.constructor":
+     * 	- Returns a new instance of Vertex.
+     * 	- Assigns the given id.
+     */
     t.test("Vertex.constructor", function (st) {
         var v0 = new vertex_1.Vertex();
         st.ok(v0 instanceof vertex_1.Vertex, "v0 is an instance of Vertex.");
@@ -30,6 +55,14 @@ test("Vertex", function (t) {
         st.equal(v1.id, 5, "v1 has an id of five.");
         st.end();
     });
+    /**
+     * Proves "Vertex.join":
+     * 	- Sets the next property of v1 to v2.
+     * 	- Sets the "previous" property of v2 to v2.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     */
     t.test("Vertex.join", function (st) {
         var v = setup();
         vertex_1.Vertex.join(v[0], v[1]);
@@ -41,6 +74,14 @@ test("Vertex", function (t) {
         st.same(v[1].next, null, "v[1].next is null.");
         st.end();
     });
+    /**
+     * Proves "Vertex.unjoin":
+     * 	- Sets the "next" and "previous" property of the given vertex to null.
+     *
+     * Assumptions:
+     * 	-	Vertex.constructor
+     * 	- Vertex.join
+     */
     t.test("Vertex.unjoin", function (st) {
         var v = setup();
         vertex_1.Vertex.join(v[0], v[1]);
@@ -51,6 +92,15 @@ test("Vertex", function (t) {
         st.same(v[1].next, null, "v[1].next is null.");
         st.end();
     });
+    /**
+     * Prove "Vertex.prototype.remove":
+     * 	- Stiches subject's "next" and "previous" vertices together.
+     * 	- Sets the subject's "next" and "previous" vertices to null.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.join
+     */
     t.test("Vertex.prototype.remove", function (st) {
         var v = setup();
         vertex_1.Vertex.join(v[0], v[1]);
@@ -63,6 +113,16 @@ test("Vertex", function (t) {
         st.same(v[2].previous, v[0]);
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.insertBefore":
+     *  - Sets the given vertex's "previous" property to be the subject's "previous" property.
+     *  - Sets the given vertex's "next" property to be the subject.
+     *  - Sets the subject's "previous" property to be the given vertex.
+     * 	- Returns the given vertex.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     */
     t.test("Vertex.prototype.insertBefore", function (st) {
         var v = setup();
         var g = v[0].insertBefore(v[1]);
@@ -71,6 +131,16 @@ test("Vertex", function (t) {
         st.same(g, v[1]);
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.insertAfter":
+     *  - Sets the given vertex's "next" property to be the subject's "next" property.
+     *  - Sets the given vertex's "previous" property to be the subject.
+     *  - Sets the subject's "next" property to be the given vertex.
+     * 	- Returns the given vertex.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     */
     t.test("Vertex.prototype.insertAfter", function (st) {
         var v = setup();
         var g = v[0].insertAfter(v[1]);
@@ -79,6 +149,10 @@ test("Vertex", function (t) {
         st.equal(g, v[1]);
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.before+get":
+     * 	- Returns an array of vertices which come before the subject in the chain.
+     */
     t.test("Vertex.prototype.before+get", function (st) {
         var v = setup();
         v[2].insertBefore(v[1]);
@@ -87,6 +161,10 @@ test("Vertex", function (t) {
         st.same(a, [v[1], v[0]]);
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.after+get":
+     * 	- Returns an array of vertices which come after the subject in the chain.
+     */
     t.test("Vertex.prototype.after+get", function (st) {
         var v = setup();
         v[0].insertAfter(v[1]);
@@ -95,6 +173,14 @@ test("Vertex", function (t) {
         st.same(a, [v[1], v[2]]);
         st.end();
     });
+    /**
+     * Proves "Vertex.protptype.first+get":
+     *	- Returns the first vertex in the chain.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.perototype.insertBefore
+     */
     t.test("Vertex.prototype.first+get", function (st) {
         var v = setup();
         st.equal(v[0].first, v[0], "v[0] is the first vertex in the chain, according to v[0].");
@@ -105,6 +191,14 @@ test("Vertex", function (t) {
         st.equal(v[1].first, v[2], "v[2] is now the first vertex in the chain, according to v[1].");
         st.end();
     });
+    /**
+     * Proves "Vertex.protptype.last+get":
+     *	- Returns the last vertex in the chain.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.prototype.insertAfter
+     */
     t.test("Vertex.prototype.last+get", function (st) {
         var v = setup();
         st.equal(v[0].last, v[0], "v[0] is the last vertex in the chain, according to v[0].");
@@ -115,6 +209,15 @@ test("Vertex", function (t) {
         st.equal(v[1].last, v[2], "v[2] is now the last vertex in the chain, according to v[1].");
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.isBefore":
+     * 	- Returns true if the subject is above the given vertex.
+     * 	- Returns false if the subject is below or is the given vertex.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.prototype.insertAfter
+     */
     t.test("Vertex.prototype.isBefore", function (st) {
         var v = setup();
         v[0].insertAfter(v[1]);
@@ -122,6 +225,15 @@ test("Vertex", function (t) {
         st.notOk(v[1].isBefore(v[0]), "v[0] is not above v[1]");
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.isAfter":
+     * 	- Returns true if the subject is below the given vertex.
+     * 	- Returns false if the subject is above or is the given vertex.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.prototype.insertBefore
+     */
     t.test("Vertex.prototype.isAfter", function (st) {
         var v = setup();
         v[0].insertBefore(v[1]);
@@ -129,6 +241,20 @@ test("Vertex", function (t) {
         st.notOk(v[1].isAfter(v[0]));
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.connectTo":
+     * 	- Throws an error if the subject is already connected directly to the target.
+     * 	- Returns an edge.
+     * 	- The edge's "top" property is set to the subject.
+     * 	- The edge's "bottom" property is set to the given vertex.
+     * 	- The edge is included in the subjects array of dowlinks.
+     *	- The edge is included in the given vertex's array of uplinks.
+     *	- The default edge id is zero.
+     *	-	Optionally assigns an id number to the edge.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     */
     t.test("Vertex.prototype.connectTo", function (st) {
         var v = setup();
         var e1 = v[0].connectTo(v[1]);
@@ -144,6 +270,15 @@ test("Vertex", function (t) {
         st.equal(e2.id, 5, "e2 has been optionally assigned the id '5'.");
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.directlyAbove"
+     * 	- Returns an array of vertices which include only the vertices which are direct uplinks of
+     * 			the subject.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.prototype.connectTo
+     */
     t.test("Vertex.prototype.directlyAbove", function (st) {
         var v = setup();
         v[2].connectTo(v[0], 0);
@@ -152,6 +287,15 @@ test("Vertex", function (t) {
         st.same(da, [v[2], v[4]], "v[2] and v[4] are directly above v[0].");
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.directlyBelow"
+     * 	- Returns an array of vertices which include only the vertices which are direct downlinks of
+     * 			the subject.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.prototype.connectTo
+     */
     t.test("Vertex.prototype.directlyBelow", function (st) {
         var v = setup();
         v[0].connectTo(v[2], 0);
@@ -160,6 +304,14 @@ test("Vertex", function (t) {
         st.same(db, [v[2], v[4]], "v[2] and v[4] are directly below v[0].");
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.above"
+     * 	- Returns an array of vertices which connect directly or indirectly to the subject.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.prototype.connectTo
+     */
     t.test("Vertex.prototype.above", function (st) {
         var v = setup();
         v[0].connectTo(v[1]);
@@ -169,6 +321,14 @@ test("Vertex", function (t) {
         st.same(a, [v[1], v[0], v[2]], "v[0], v[1] and v[2] are directly above v[3].");
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.below"
+     * 	- Returns an array of vertices to which the subject connects directly or indirectly.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.prototype.connectTo
+     */
     t.test("Vertex.prototype.below", function (st) {
         var v = setup();
         v[0].connectTo(v[1]);
@@ -178,6 +338,15 @@ test("Vertex", function (t) {
         st.same(a, [v[1], v[3], v[2]], "v[1], v[2] and v[3] are directly below v[0].");
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.isAbove":
+     * 	- Returns true if the subject is a direct or indirect downlink of the given vertex.
+     * 	- Returns false if the given vertex is the subject.
+     *
+     * Assumumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.prototype.connectTo
+     */
     t.test("Vertex.prototype.isAbove", function (st) {
         var v = setupAndConnect();
         st.ok(v[1].isAbove(v[0]), "v[1] is above v[0].");
@@ -187,6 +356,15 @@ test("Vertex", function (t) {
         st.notOk(v[3].isAbove(v[0]), "v[3] is not above v[0].");
         st.end();
     });
+    /**
+     * Proves: "Vertex.prototype.isBelow":
+     * 	- Returns true if the subject is a direct or indirect uplink of the given vertex.
+     * 	- Returns false if the given vertex is the subject.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.prototype.connectTo
+     */
     t.test("Vertex.prototype.isBelow", function (st) {
         var v = setupAndConnect();
         st.ok(v[2].isBelow(v[3]), "v[2] is below v[3].");
@@ -197,6 +375,15 @@ test("Vertex", function (t) {
         st.notOk(v[4].isBelow(v[3]), "v[4] is not below v[2].");
         st.end();
     });
+    /**
+     * Proves "Vertex.prototype.reflow":
+     * 	- Moves the subject in the chain directly above its highest downlink.
+     * 	- Returns the subject.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.prototype.insertBefore
+     */
     t.test("Vertex.prototype.reflow", function (st) {
         var v = setupAndConnect();
         v[3].connectTo(v[0]);
@@ -209,6 +396,15 @@ test("Vertex", function (t) {
         st.same(v[4].previous, v[1], "v[4].previous should be v[1].");
         st.end();
     });
+    /**
+     * Prove "Vertex.prototype.availableConnections":
+     * 	- Returns an array prototypical edges which could be created without creating a cyclic
+     * 			connection.
+     *
+     * Assumptions:
+     * 	- Vertex.constructor
+     * 	- Vertex.prototype.connectTo
+     */
     t.test("Vertex.prototype.availableConnections", function (st) {
         var v = setupAndConnect();
         var a2 = v[2].availableConnections();
@@ -243,6 +439,9 @@ test("Vertex", function (t) {
         ], "v[4] can connect to v[1], v[2] and v[3].");
         st.end();
     });
+    /**
+     * Done.
+     */
     t.end();
 });
 //# sourceMappingURL=vertex.spec.js.map
