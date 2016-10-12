@@ -123,6 +123,23 @@ test("Graph", t => {
 	});
 
 	/**
+	 * Proves "Graph.prototype.clear":
+	 * 	- Removes all vertices.
+	 * 	- Removes all edges.
+	 * 
+	 * Assumptions:
+	 * 	- Graph.constructor
+	 * 	- Graph.prototype.addVertex
+	 */
+	t.test("Graph.prototype.clear", st => {
+		const g = setupAndConnect();
+		g.clear();
+		st.same(g.vertices, [], "the are no vertices.");
+		st.same(g.edges, [], "there are no edges.");
+		st.end();
+	});
+
+	/**
 	 * Done.
 	 */
 	t.end();

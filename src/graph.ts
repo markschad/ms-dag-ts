@@ -77,7 +77,17 @@ export class Graph {
 	 * Traverses the graph in order, calling callback at each vertex.
 	 */
 	public traverse(cb: TraversalCallback) {
-		this._traverse(this._vertices[0].first, 0, cb);
+		if (this._vertices.length > 0) {
+			this._traverse(this._vertices[0].first, 0, cb);
+		}
+	}
+
+	/**
+	 * Clears all vertices and edges from the graph.
+	 */
+	public clear() {
+		this._vertices = [];
+		this._edges = [];
 	}
 
 }
